@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:my_bank/constants/my_colors.dart';
 import 'package:my_bank/cubit/app_bank_cubit.dart';
@@ -40,12 +42,9 @@ bulidCard(context) => Container(
         children: [
           Row(children: [
             Container(
-              // height: 60,
-              // width: 60,
               padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                // color: transaction.color,
               ),
               child: const Icon(Icons.shopping_cart_sharp),
             ),
@@ -82,10 +81,6 @@ bulidCard(context) => Container(
       ),
     );
 
-// buildItime({
-
-// }) =>
-
 class buildItime extends StatelessWidget {
   final String label;
   final IconData icon;
@@ -119,7 +114,6 @@ class buildItime extends StatelessWidget {
                   child: Icon(icon)),
               Text(
                 label,
-                // ignore: deprecated_member_use
                 style: Theme.of(context).textTheme.headline1,
               )
             ],

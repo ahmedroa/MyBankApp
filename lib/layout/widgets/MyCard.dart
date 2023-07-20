@@ -54,7 +54,6 @@ class MyCard extends StatelessWidget {
                               children: [
                                 Text(
                                   "EXP DATE",
-                                  // style: TextStyle(color: kThirdColor),
                                 ),
                                 Text(
                                   '12/21',
@@ -68,7 +67,6 @@ class MyCard extends StatelessWidget {
                               children: [
                                 Text(
                                   "CVV NUMBER",
-                                  // style: TextStyle(color: kThirdColor),
                                 ),
                                 Text(
                                   "**4",

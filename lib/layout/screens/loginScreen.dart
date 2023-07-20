@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_bank/constants/my_colors.dart';
 import 'package:my_bank/cubit/app_bank_cubit.dart';
 import 'package:my_bank/layout/screens/Register.dart';
 import 'package:my_bank/layout/screens/bottom_navbar.dart';
+import 'package:my_bank/layout/screens/home.dart';
 import 'package:my_bank/layout/widgets/MainButton.dart';
 
 class Login extends StatefulWidget {
@@ -17,6 +20,8 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool isVisible = true;
+  bool isClicked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +69,7 @@ class _LoginState extends State<Login> {
                             labelStyle: TextStyle(color: cubit ? MyColors.containerlight : MyColors.containerDark),
                             labelText: 'البريد الالكتروني',
                             hintText: 'Enter your email!',
+                            hintStyle: TextStyle(color: cubit ? MyColors.containerlight : MyColors.containerDark),
                             enabledBorder: const OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: MyColors.purple,
@@ -83,6 +89,7 @@ class _LoginState extends State<Login> {
                             labelText: 'كلمة المرور',
                             labelStyle: TextStyle(color: cubit ? MyColors.containerlight : MyColors.containerDark),
                             hintText: 'Enter your pasword!',
+                            hintStyle: TextStyle(color: cubit ? MyColors.containerlight : MyColors.containerDark),
                             enabledBorder: const OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: MyColors.purple,
@@ -95,7 +102,6 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         const SizedBox(height: 16.0),
-                        // if (_authType == AuthFormType.login)
                         Align(
                           alignment: Alignment.topRight,
                           child: InkWell(
@@ -110,16 +116,59 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         const SizedBox(height: 24.0),
+                        Container(
+                          width: double.infinity,
+                          height: 50,
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          decoration: BoxDecoration(
+                            color: MyColors.purple,
+                            borderRadius: BorderRadius.circular(
+                              15.0,
+                            ),
+                          ),
+                          child: MaterialButton(
+                            height: 42.0,
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                setState(() {
+                                  isClicked = true;
+                                });
 
-                        MainButton(
-                          text: 'تسجيل الدخول',
-                          onTap: () {
-                            // if (_formKey.currentState!.validate()) {
-                            navigateTo(context, BottomNavbar());
-                            // }
-                          },
+                                FirebaseAuth.instance
+                                    .signInWithEmailAndPassword(
+                                        email: _emailController.text, password: _emailController.text)
+                                    .then((value) {
+                                  setState(() {
+                                    isClicked = false;
+                                  });
+                                  navigateTo(context, const HomeScreen());
+                                }).catchError((error) {
+                                  setState(() {
+                                    isClicked = false;
+                                    // ignore: prefer_const_declarations
+                                    final snackBar = const SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text('البريد الاكتروني وكلمة المرور غير متطابقان'),
+                                    );
+
+                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  });
+                                });
+                              }
+                            },
+                            child: isClicked
+                                ? const CupertinoActivityIndicator(
+                                    color: Colors.white,
+                                  )
+                                : const Text(
+                                    'تسجيل الدخول',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 22,
+                                    ),
+                                  ),
+                          ),
                         ),
-
                         const SizedBox(height: 16.0),
                         Align(
                           alignment: Alignment.center,
@@ -132,6 +181,8 @@ class _LoginState extends State<Login> {
                                   .copyWith(color: cubit ? MyColors.containerlight : MyColors.containerDark),
                             ),
                             onTap: () {
+                              FirebaseAuth.instance
+                                  .createUserWithEmailAndPassword(email: 'ss@gmail.com', password: 'password');
                               navigateTo(context, const Register());
                             },
                           ),

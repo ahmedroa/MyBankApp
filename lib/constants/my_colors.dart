@@ -10,8 +10,6 @@ class MyColors {
   static const Color light = Color(0xfff6f6f5);
   static const Color green = Color(0xff0eb24e);
   static const Color lightGrey = Color(0xffE1E1E1);
-  // static const kTextColor = Color(0xFF29445d);
-  // static const Color blue = Color.fromARGB(255, 1, 80, 237);
 }
 
 void navigateTo(context, widget) => Navigator.push(
