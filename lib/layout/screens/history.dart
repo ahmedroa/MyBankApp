@@ -1,6 +1,9 @@
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
+import 'package:my_bank/cubit/app_bank_cubit.dart';
 import 'package:my_bank/layout/widgets/TransactionCard.dart';
+
+import '../../constants/my_colors.dart';
 
 class History extends StatelessWidget {
   const History({super.key});
@@ -16,7 +19,11 @@ class History extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('العمليات', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.black)),
+                Text(
+                  'العمليات',
+                  // ignore: deprecated_member_use
+                  style: Theme.of(context).textTheme.headline1,
+                ),
               ],
             ),
             // Text('Day'),
@@ -28,7 +35,7 @@ class History extends StatelessWidget {
                 3: Text('عمليات هذا الشهر ', style: Theme.of(context).textTheme.titleMedium),
               },
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: AppBankCubit.get(context).isDark ? MyColors.containerDark : MyColors.containerlight,
                 borderRadius: BorderRadius.circular(16),
               ),
               thumbDecoration: BoxDecoration(
@@ -55,9 +62,7 @@ class History extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xfff6f6f5),
-                ),
+                decoration: const BoxDecoration(),
                 child: const Padding(
                   padding: EdgeInsets.only(left: 12, right: 12),
                   child: TransactionCard(),

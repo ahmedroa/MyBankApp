@@ -4,11 +4,15 @@ import 'package:flutter/services.dart';
 import '../constants/my_colors.dart';
 
 ThemeData lightTheme = ThemeData(
+  textTheme: const TextTheme(
+    // ignore: deprecated_member_use
+    headline1: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+  ),
   // textTheme: TextTheme(),
   iconTheme: const IconThemeData(color: MyColors.purple),
   scaffoldBackgroundColor: MyColors.light,
   appBarTheme: const AppBarTheme(
-      iconTheme: IconThemeData(color: MyColors.blue),
+      iconTheme: IconThemeData(color: MyColors.light),
       // backwardsCompatibility: false,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: MyColors.blue,
@@ -24,6 +28,14 @@ ThemeData lightTheme = ThemeData(
 );
 
 ThemeData darkTheme = ThemeData(
+    // primaryColorDark: Colors.amber,
+    // listTileTheme: ListTileThemeData(textColor: Colors.white),
+    // textTheme: TextTheme(),
+    textTheme: const TextTheme(
+      // ignore: deprecated_member_use
+      headline1: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+    ),
+    iconTheme: const IconThemeData(color: MyColors.purple),
     scaffoldBackgroundColor: MyColors.darkTheme,
     appBarTheme: const AppBarTheme(
         iconTheme: IconThemeData(color: Colors.white),

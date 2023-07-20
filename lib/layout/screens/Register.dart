@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:my_bank/constants/my_colors.dart';
+import 'package:my_bank/cubit/app_bank_cubit.dart';
 import 'package:my_bank/layout/screens/veriffication.dart';
 import 'package:my_bank/layout/widgets/MainButton.dart';
+import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -90,8 +91,10 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
+    var cubit = AppBankCubit.get(context).isDark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Padding(
@@ -106,27 +109,30 @@ class _RegisterState extends State<Register> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                       icon: const Icon(
                         Icons.arrow_back,
                         size: 30,
                       )),
                   const SizedBox(height: 90.0),
                   Text('حساب جديد',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold)),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: cubit ? MyColors.containerlight : MyColors.containerDark,
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold)),
                   TextFormField(
                     controller: _nameController,
                     focusNode: _nameFocusNode,
                     onEditingComplete: () => FocusScope.of(context).requestFocus(_passwordFocusNode),
                     textInputAction: TextInputAction.next,
                     validator: (val) => val!.isEmpty ? 'Please enter your name!' : null,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'اسم المستخدم',
+                      labelStyle: TextStyle(color: cubit ? MyColors.containerlight : MyColors.containerDark),
                       hintText: 'ادخل اسم مستخدم جديد',
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: MyColors.purple,
                           width: 1,
@@ -143,10 +149,11 @@ class _RegisterState extends State<Register> {
                     controller: _emailController,
                     focusNode: _emailFocusNode,
                     validator: (val) => val!.isEmpty ? 'Please enter your email!' : null,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'البريد الالكتروني',
+                      labelStyle: TextStyle(color: cubit ? MyColors.containerlight : MyColors.containerDark),
                       hintText: ' ادخل البريد الالكتروني!',
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: MyColors.purple,
                           width: 1,
@@ -162,10 +169,11 @@ class _RegisterState extends State<Register> {
                     controller: _passwordController,
                     focusNode: _passwordFocusNode,
                     validator: (val) => val!.isEmpty ? 'Please enter your password!' : null,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'كلمة المرور',
+                      labelStyle: TextStyle(color: cubit ? MyColors.containerlight : MyColors.containerDark),
                       hintText: 'ادخل كلمة المرور!',
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: MyColors.purple,
                           width: 1,

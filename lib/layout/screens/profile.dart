@@ -1,5 +1,8 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:my_bank/constants/my_colors.dart';
+import 'package:my_bank/cubit/app_bank_cubit.dart';
 import 'package:my_bank/layout/screens/loginScreen.dart';
 import 'package:my_bank/layout/widgets/MainButton.dart';
 
@@ -16,7 +19,8 @@ class Profile extends StatelessWidget {
           children: [
             Text(
               'الملف الشخصي ',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.black),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: AppBankCubit.get(context).isDark ? MyColors.containerlight : MyColors.containerDark),
             ),
             const Spacer(),
             const CircleAvatar(
@@ -29,7 +33,9 @@ class Profile extends StatelessWidget {
             const SizedBox(
               height: 12,
             ),
-            Text('ahmed', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.black)),
+            Text('ahmed',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: AppBankCubit.get(context).isDark ? MyColors.containerlight : MyColors.containerDark)),
             const SizedBox(
               height: 30,
             ),
@@ -63,7 +69,9 @@ class BuildEditProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      // color: Colors.white,
+      color: AppBankCubit.get(context).isDark ? MyColors.containerDark : MyColors.containerlight,
+
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -73,11 +81,11 @@ class BuildEditProfile extends StatelessWidget {
               children: [
                 Text(
                   text,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18),
+                  style: Theme.of(context).textTheme.headline1,
                 ),
                 Text(
                   texttow,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18),
+                  style: Theme.of(context).textTheme.headline1,
                 ),
               ],
             ),

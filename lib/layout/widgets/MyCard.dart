@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_bank/constants/my_colors.dart';
 
 class MyCard extends StatelessWidget {
-  const MyCard({Key? key}) : super(key: key);
+  // ignore: prefer_typing_uninitialized_variables
+  final color;
+  const MyCard({Key? key, required this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +14,9 @@ class MyCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'بطاقاتي',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.grey[800]),
-          ),
           Container(
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 116, 79, 152),
+              color: color,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(

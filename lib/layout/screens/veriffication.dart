@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_bank/constants/my_colors.dart';
 import 'package:my_bank/layout/screens/bottom_navbar.dart';
-import 'package:my_bank/layout/screens/home.dart';
 import 'package:my_bank/layout/widgets/MainButton.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -67,7 +66,7 @@ class Veriffication extends StatelessWidget {
                   ?.copyWith(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 26),
             ),
             Text(
-              '',
+              'ادخل الكود المؤلف من 6 ارقام',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.grey[700]),
             ),
             const SizedBox(

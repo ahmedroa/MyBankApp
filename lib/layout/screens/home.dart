@@ -1,5 +1,9 @@
+// ignore_for_file: deprecated_member_use, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:my_bank/constants/my_colors.dart';
+import 'package:my_bank/cubit/app_bank_cubit.dart';
+import 'package:my_bank/layout/screens/detailsCard.dart';
 import 'package:my_bank/layout/screens/history.dart';
 import 'package:my_bank/layout/widgets/MyCard.dart';
 import 'package:my_bank/layout/widgets/TransactionCard.dart';
@@ -10,7 +14,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: MyColors.light,
       body: SafeArea(
         child: Column(children: [
           Padding(
@@ -28,19 +31,27 @@ class HomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 6),
                   child: Text(
                     'احمد',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+                    // ignore: deprecated_member_use .
+                    style: Theme.of(context).textTheme.headline1,
                   ),
                 ),
                 const Spacer(),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.menu))
+                // IconButton(onPressed: () {}, icon: const Icon(Icons.menu))
+                IconButton(
+                    onPressed: () {
+                      AppBankCubit.get(context).changeAppMode();
+                    },
+                    icon: const Icon(Icons.brightness_4_outlined)),
               ],
             ),
           ),
-          const MyCard(),
+          InkWell(
+            onTap: () => navigateTo(context, const DetailsCard()),
+            child: const MyCard(
+              color: Color.fromARGB(255, 116, 79, 152),
+            ),
+          ),
           // Image.asset('image/card.png'),
           const SizedBox(
             height: 10,
@@ -51,17 +62,17 @@ class HomeScreen extends StatelessWidget {
               width: double.infinity,
               height: 90,
               // color: Colors.white,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: AppBankCubit.get(context).isDark ? MyColors.containerDark : MyColors.containerlight,
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15),
                   bottomRight: Radius.circular(15),
                   bottomLeft: Radius.circular(15),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Row(
                   children: [
                     buildItime(icon: Icons.add_card, label: 'اضاة بطاقة'),
@@ -79,10 +90,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Text(
                   "التحويلات الاخيرة",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headline1,
                 ),
                 const Spacer(),
                 InkWell(
@@ -114,7 +122,6 @@ class HomeScreen extends StatelessWidget {
           Expanded(
             child: Container(
               decoration: const BoxDecoration(
-                color: Color(0xfff6f6f5),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15),
@@ -122,7 +129,7 @@ class HomeScreen extends StatelessWidget {
               ),
               // color: Colors.white,
               height: double.infinity,
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.only(left: 12, right: 12),
                 child: TransactionCard(),
               ),

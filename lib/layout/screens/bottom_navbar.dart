@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_bank/constants/my_colors.dart';
+import 'package:my_bank/cubit/app_bank_cubit.dart';
+import 'package:my_bank/layout/screens/cards.dart';
 import 'package:my_bank/layout/screens/history.dart';
 import 'package:my_bank/layout/screens/home.dart';
 import 'package:my_bank/layout/screens/profile.dart';
@@ -20,7 +22,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
     return [
       const HomeScreen(),
       const History(),
-      Container(),
+      const Cards(),
       const Profile(),
     ];
   }
@@ -64,7 +66,9 @@ class _BottomNavbarState extends State<BottomNavbar> {
         items: _navBarsItems(),
         confineInSafeArea: true,
 
-        backgroundColor: Colors.white, // Default is Colors.white.
+        backgroundColor: AppBankCubit.get(context).isDark
+            ? MyColors.containerDark
+            : MyColors.containerlight, // Default is Colors.white.
         handleAndroidBackButtonPress: true, // Default is true.
         resizeToAvoidBottomInset:
             true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
@@ -88,7 +92,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
           curve: Curves.ease,
           duration: Duration(milliseconds: 200),
         ),
-        navBarStyle: NavBarStyle.simple, // Choose the nav bar style with this property.
+        navBarStyle: NavBarStyle.style3, // Choose the nav bar style with this property.
       ),
     );
   }

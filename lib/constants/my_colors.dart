@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 
 class MyColors {
   static const Color blue = Colors.grey;
-  // static const Color blue = Color.fromARGB(255, 1, 80, 237);
   static const Color purple = Color.fromARGB(255, 116, 79, 152);
-  static const Color bluee = Color(0xff0077c8);
-  static const Color darkTheme = Color(0xff204056);
+  static const Color darkTheme = Color(0xff1f232e);
+  static const Color containerDark = Color(0xff353842);
+  static const Color containerlight = Colors.white;
   static const Color lightBlue = Color(0xffE5EFFD);
   static const Color light = Color(0xfff6f6f5);
   static const Color green = Color(0xff0eb24e);
   static const Color lightGrey = Color(0xffE1E1E1);
-  static const kTextColor = Color(0xFF29445d);
+  // static const kTextColor = Color(0xFF29445d);
+  // static const Color blue = Color.fromARGB(255, 1, 80, 237);
 }
 
 void navigateTo(context, widget) => Navigator.push(
