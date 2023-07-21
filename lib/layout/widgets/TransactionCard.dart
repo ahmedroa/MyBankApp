@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:my_bank/constants/my_colors.dart';
-import 'package:my_bank/cubit/app_bank_cubit.dart';
+import 'package:my_bank/cubit/cubit.dart';
 
 class TransactionCard extends StatefulWidget {
   const TransactionCard({

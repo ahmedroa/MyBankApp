@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:my_bank/constants/my_colors.dart';
-import 'package:my_bank/cubit/app_bank_cubit.dart';
+import 'package:my_bank/cubit/cubit.dart';
 import 'package:my_bank/layout/screens/detailsCard.dart';
 import 'package:my_bank/layout/screens/history.dart';
 import 'package:my_bank/layout/widgets/MyCard.dart';
@@ -13,6 +13,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cubit = AppBankCubit.get(context);
     return Scaffold(
       body: SafeArea(
         child: Column(children: [
@@ -27,20 +28,20 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(
                   width: 10,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 6),
-                  child: Text(
-                    'احمد',
-                    // ignore: deprecated_member_use .
-                    style: Theme.of(context).textTheme.headline1,
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 6),
+                //   child: Text(
+                //     '${cubit.userModel!.email}',
+                //     // ignore: deprecated_member_use .
+                //     style: Theme.of(context).textTheme.headline1,
+                //   ),
+                // ),
                 const Spacer(),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
                 // IconButton(onPressed: () {}, icon: const Icon(Icons.menu))
                 IconButton(
                     onPressed: () {
-                      AppBankCubit.get(context).changeAppMode();
+                      AppBankCubit.get(context).getDataAdmn();
                     },
                     icon: const Icon(Icons.brightness_4_outlined)),
               ],

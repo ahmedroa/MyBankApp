@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_bank/constants/my_colors.dart';
-import 'package:my_bank/cubit/app_bank_cubit.dart';
+import 'package:my_bank/cubit/cubit.dart';
 import 'package:my_bank/layout/screens/cards.dart';
 import 'package:my_bank/layout/screens/history.dart';
 import 'package:my_bank/layout/screens/home.dart';

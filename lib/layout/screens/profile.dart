@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:my_bank/constants/my_colors.dart';
-import 'package:my_bank/cubit/app_bank_cubit.dart';
-import 'package:my_bank/layout/screens/loginScreen.dart';
+import 'package:my_bank/cubit/cubit.dart';
+import 'package:my_bank/Auth/loginScreen.dart';
 import 'package:my_bank/layout/widgets/MainButton.dart';
 
 class Profile extends StatelessWidget {

@@ -1,8 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_bank/Auth/veriffication.dart';
 import 'package:my_bank/constants/my_colors.dart';
-import 'package:my_bank/cubit/app_bank_cubit.dart';
-import 'package:my_bank/layout/screens/veriffication.dart';
-import 'package:my_bank/layout/widgets/MainButton.dart';
+import 'package:my_bank/cubit/cubit.dart';
+
 import 'package:flutter/material.dart';
+import 'package:my_bank/model/userModel.dart';
+
+// import '../layout/screens/bottom_navbar.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -16,10 +23,14 @@ class _RegisterState extends State<Register> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _emailFocusNode = FocusNode();
   final _nameFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   bool isChecked = false;
+  bool isVisible = true;
+  bool isClicked = false;
+
   String generateCountryFlag() {
     String countryCode = 'SA';
 
@@ -45,6 +56,7 @@ class _RegisterState extends State<Register> {
             ),
             child: TextFormField(
               // autofocus: true,
+              controller: _phoneController,
               style: const TextStyle(
                 fontSize: 18,
                 letterSpacing: 2.0,
@@ -55,7 +67,7 @@ class _RegisterState extends State<Register> {
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Please enter yout phone number!';
-                } else if (value.length < 10) {
+                } else if (value.length < 11) {
                   return 'Too short for a phone number!';
                 }
                 return null;
@@ -86,6 +98,49 @@ class _RegisterState extends State<Register> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildPhoneNumberSubmitedBloc() {
+    return BlocListener<AppBankCubit, AppBankState>(
+      listenWhen: (previous, current) {
+        return previous != current; // == Loding
+      },
+      listener: (context, state) {
+        if (state is Loading) {
+          showProgressIndicator(context);
+        }
+
+        if (state is PhoneNumberSubmited) {
+          Navigator.pop(context);
+          // navigateAndFinish(context, MapScreen(phoneNumber: phoneNumber));
+        }
+
+        if (state is ErrorOccurred) {
+          Navigator.pop(context);
+          String errorMsg = (state).errorMsg;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorMsg),
+              backgroundColor: Colors.black,
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+      },
+      child: Container(),
+    );
+  }
+
+  void showProgressIndicator(BuildContext context) {
+    AlertDialog alertDialog = AlertDialog(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      content: Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+        ),
+      ),
     );
   }
 
@@ -208,14 +263,59 @@ class _RegisterState extends State<Register> {
                       ),
                     ],
                   ),
-                  MainButton(
-                    text: 'تسجيل',
-                    onTap: () {
-                      // if (_formKey.currentState!.validate()) {
-                      navigateTo(context, const Veriffication());
-                      // }
-                    },
+                  Container(
+                    height: 42.0,
+                    width: double.infinity,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    decoration: BoxDecoration(
+                      // color: kTextColor,
+                      borderRadius: BorderRadius.circular(
+                        15.0,
+                      ),
+                    ),
+                    child: MaterialButton(
+                      color: MyColors.purple,
+                      height: 42.0,
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            isClicked = true;
+                          });
+                          FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                  email: _emailController.text, password: _passwordController.text)
+                              .then((userData) {
+                            UserModel model = UserModel(
+                              uId: userData.user!.uid,
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                              name: _nameController.text,
+                              phone: _phoneController.text,
+                            );
+                            FirebaseFirestore.instance
+                                .collection('admin')
+                                .doc(userData.user!.uid)
+                                .set(model.toJson())
+                                .then((value) {
+                              BlocProvider.of<AppBankCubit>(context).submitPhoneNumber(_phoneController.text);
+
+                              setState(() {
+                                isClicked = false;
+                              });
+                              navigateTo(context, Veriffication());
+                            }).catchError((error) {});
+                          });
+                        }
+                      },
+                      child: isClicked
+                          ? const CupertinoActivityIndicator(color: Colors.white)
+                          : const Text(
+                              'تسجيل',
+                              style: TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                    ),
                   ),
+                  _buildPhoneNumberSubmitedBloc(),
                   const SizedBox(height: 16.0),
                   // Align(
                   //   alignment: Alignment.center,
@@ -229,7 +329,6 @@ class _RegisterState extends State<Register> {
                   //     },
                   //   ),
                   // ),
-                  // SizedBox(height: size.height * 0.09),
                 ],
               ),
             ),

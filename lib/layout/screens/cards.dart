@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_bank/constants/my_colors.dart';
 import 'package:my_bank/layout/widgets/MyCard.dart';
 
-import '../../cubit/app_bank_cubit.dart';
+import '../../cubit/cubit.dart';
 
 class Cards extends StatelessWidget {
   const Cards({super.key});

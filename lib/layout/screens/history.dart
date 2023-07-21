@@ -1,6 +1,6 @@
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
-import 'package:my_bank/cubit/app_bank_cubit.dart';
+import 'package:my_bank/cubit/cubit.dart';
 import 'package:my_bank/layout/widgets/TransactionCard.dart';
 
 import '../../constants/my_colors.dart';
