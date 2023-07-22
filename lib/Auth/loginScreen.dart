@@ -9,7 +9,7 @@ import 'package:my_bank/constants/my_colors.dart';
 import 'package:my_bank/cubit/cubit.dart';
 import 'package:my_bank/Auth/Register.dart';
 import 'package:my_bank/layout/screens/bottom_navbar.dart';
-import 'package:my_bank/layout/screens/home.dart';
+import 'package:my_bank/layout/widgets/MainButton.dart';
 import 'package:my_bank/layout/widgets/massage.dart';
 
 class Login extends StatefulWidget {
@@ -24,183 +24,158 @@ class _LoginState extends State<Login> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  bool isVisible = true;
   bool isClicked = false;
 
   @override
   Widget build(BuildContext context) {
-    var cubit = AppBankCubit.get(context).isDark;
+    var cubit = AppBankCubit.get(context);
 
     return Scaffold(
-      // resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Image.asset('image/login.png'),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                      onPressed: () {
-                        AppBankCubit.get(context).changeAppMode();
-                      },
-                      icon: const Icon(Icons.brightness_4_outlined)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 60.0,
-                    horizontal: 32.0,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('تسجيل الدخول',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(color: cubit ? MyColors.containerlight : MyColors.containerDark)),
-                      const SizedBox(height: 80.0),
-                      TextFormField(
-                        controller: _emailController,
-                        textInputAction: TextInputAction.next,
-                        validator: (val) => val!.isEmpty ? 'Please enter your email!' : null,
+      body: BlocConsumer<AppBankCubit, AppBankState>(
+        listener: (context, state) {
+          if (state is Loading) {
+            showProgressIndicator(context);
+          }
+          if (state is LoginSuccessful) {
+            Navigator.of(context).pop();
 
-                        style: const TextStyle(color: MyColors.purple), // color text
-                        cursorColor: MyColors.purple,
-                        // showCursor: true,
-                        decoration: InputDecoration(
-                          labelStyle: const TextStyle(color: MyColors.purple),
-                          labelText: 'البريد الالكتروني',
-                          hintText: 'Enter your email!',
-                          helperStyle: TextStyle(color: cubit ? MyColors.containerlight : MyColors.containerDark),
-                          hintStyle: TextStyle(color: cubit ? MyColors.containerlight : MyColors.containerDark),
-                          // enabled: false,
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: MyColors.purple,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24.0),
-                      TextFormField(
-                        controller: _passwordController,
-                        validator: (val) => val!.isEmpty ? 'Please enter your password!' : null,
-                        decoration: InputDecoration(
-                          labelText: 'كلمة المرور',
-                          labelStyle: TextStyle(color: cubit ? MyColors.containerlight : MyColors.containerDark),
-                          hintText: 'Enter your pasword!',
-                          hintStyle: TextStyle(color: cubit ? MyColors.containerlight : MyColors.containerDark),
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: MyColors.purple,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16.0),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: InkWell(
-                          child: Text(
-                            'هل نسيت كلمة المرور ؟',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(color: cubit ? MyColors.containerlight : MyColors.containerDark),
-                          ),
-                          onTap: () {
-                            navigateTo(context, const ForgotYourPassword());
+            navigateAndFinish(context, const BottomNavbar());
+          }
+          if (state is LogoutFailed) {
+            Navigator.of(context).pop();
+          }
+        },
+        builder: (context, state) {
+          return SafeArea(
+            child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                          onPressed: () {
+                            cubit.changeAppMode();
                           },
-                        ),
+                          icon: const Icon(Icons.brightness_4_outlined)),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 60.0,
+                        horizontal: 32.0,
                       ),
-                      const SizedBox(height: 24.0),
-                      Container(
-                        width: double.infinity,
-                        height: 50,
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        decoration: BoxDecoration(
-                          color: MyColors.purple,
-                          borderRadius: BorderRadius.circular(
-                            15.0,
-                          ),
-                        ),
-                        child: MaterialButton(
-                          height: 42.0,
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              setState(() {
-                                isClicked = true;
-                              });
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('تسجيل الدخول',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(color: cubit.isDark ? MyColors.green : MyColors.containerDark)),
+                          const SizedBox(height: 80.0),
+                          TextFormField(
+                            controller: _emailController,
+                            textInputAction: TextInputAction.next,
+                            validator: (val) => val!.isEmpty ? 'Please enter your email!' : null,
 
-                              try {
-                                await FirebaseAuth.instance.signInWithEmailAndPassword(
-                                    email: _emailController.text, password: _passwordController.text);
-                                setState(() {
-                                  isClicked = false;
-                                });
-                                message(message: 'تم تسجيبل الدخول بنجاح ', color: Colors.grey.shade800);
-                                navigateAndFinish(context, const BottomNavbar());
-                              } on FirebaseAuthException catch (exception) {
-                                setState(() {
-                                  isClicked = false;
-                                });
-                                if (exception.code == 'user-not-found') {
-                                  message(
-                                      message: 'لم يتم العثور على مستخدم لهذا البريد الإلكتروني', color: Colors.red);
-                                } else if (exception.code == 'wrong-password') {
-                                  message(message: 'البريد الاكتروني وكلمة المرور غير متطابقان', color: Colors.red);
-                                }
-                              }
-                            }
-                          },
-                          child: isClicked
-                              ? const CupertinoActivityIndicator(
-                                  color: Colors.white,
-                                )
-                              : const Text(
-                                  'تسجيل الدخول',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 22,
-                                  ),
+                            style: TextStyle(
+                                color: cubit.isDark ? MyColors.containerlight : MyColors.containerDark), // color text
+                            cursorColor: MyColors.purple,
+                            // showCursor: true,
+                            decoration: InputDecoration(
+                              labelStyle:
+                                  TextStyle(color: cubit.isDark ? MyColors.containerlight : MyColors.containerDark),
+                              labelText: 'البريد الالكتروني',
+                              hintText: 'Enter your email!',
+                              helperStyle:
+                                  TextStyle(color: cubit.isDark ? MyColors.containerlight : MyColors.containerDark),
+                              hintStyle:
+                                  TextStyle(color: cubit.isDark ? MyColors.containerlight : MyColors.containerDark),
+                              // enabled: false,
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: MyColors.purple,
+                                  width: 1,
                                 ),
-                        ),
-                      ),
-                      const SizedBox(height: 16.0),
-                      Align(
-                        alignment: Alignment.center,
-                        child: InkWell(
-                          child: Text(
-                            "تسجيل حساب جديد",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge!
-                                .copyWith(color: cubit ? MyColors.containerlight : MyColors.containerDark),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
+                              ),
+                            ),
                           ),
-                          onTap: () {
-                            navigateTo(context, const Register());
-                          },
-                        ),
+                          const SizedBox(height: 24.0),
+                          TextFormField(
+                            controller: _passwordController,
+                            validator: (val) => val!.isEmpty ? 'Please enter your password!' : null,
+                            decoration: InputDecoration(
+                              labelText: 'كلمة المرور',
+                              labelStyle:
+                                  TextStyle(color: cubit.isDark ? MyColors.containerlight : MyColors.containerDark),
+                              hintText: 'Enter your pasword!',
+                              hintStyle:
+                                  TextStyle(color: cubit.isDark ? MyColors.containerlight : MyColors.containerDark),
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: MyColors.purple,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: InkWell(
+                              child: Text(
+                                'هل نسيت كلمة المرور ؟',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(color: cubit.isDark ? MyColors.containerlight : MyColors.containerDark),
+                              ),
+                              onTap: () {
+                                navigateTo(context, const ForgotYourPassword());
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 24.0),
+                          MainButton(
+                              text: 'تسجيل الدخول',
+                              onTap: () {
+                                if (_formKey.currentState!.validate()) {
+                                  cubit.signin(email: _emailController.text, passpprd: _passwordController.text);
+                                }
+                              }),
+                          const SizedBox(height: 16.0),
+                          Align(
+                            alignment: Alignment.center,
+                            child: InkWell(
+                              child: Text(
+                                "تسجيل حساب جديد",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(color: cubit.isDark ? MyColors.containerlight : MyColors.containerDark),
+                              ),
+                              onTap: () {
+                                navigateTo(context, const Register());
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

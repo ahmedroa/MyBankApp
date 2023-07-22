@@ -15,6 +15,10 @@ class GetDataUserErrorgState extends AppBankState {}
 
 class Loading extends AppBankState {}
 
+class LoginSuccessful extends AppBankState {}
+
+class LogoutFailed extends AppBankState {}
+
 class LogoutSuccessful extends AppBankState {}
 
 class ErrorOccurred extends AppBankState {
@@ -24,5 +28,7 @@ class ErrorOccurred extends AppBankState {
 }
 
 class PhoneNumberSubmited extends AppBankState {}
+
+class phoneSusd extends AppBankState {}
 
 class PhoneOTPVerified extends AppBankState {}

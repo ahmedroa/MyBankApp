@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_bank/constants/my_colors.dart';
 import 'package:my_bank/cubit/cubit.dart';
-import 'package:my_bank/layout/screens/home.dart';
+import 'package:my_bank/layout/screens/bottom_navbar.dart';
+import 'package:my_bank/layout/widgets/massage.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class Veriffication extends StatefulWidget {
@@ -48,27 +49,6 @@ class _VerifficationState extends State<Veriffication> {
     );
   }
 
-  void showProgressIndicator(BuildContext context) {
-    AlertDialog alertDialog = AlertDialog(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      content: Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-        ),
-      ),
-    );
-
-    showDialog(
-      barrierColor: Colors.white.withOpacity(0),
-      barrierDismissible: false,
-      context: context,
-      builder: (context) {
-        return alertDialog;
-      },
-    );
-  }
-
   late String otpCode;
   void _login(BuildContext context) {
     BlocProvider.of<AppBankCubit>(context).submitOTP(otpCode);
@@ -85,22 +65,17 @@ class _VerifficationState extends State<Veriffication> {
         }
 
         if (state is PhoneOTPVerified) {
-          navigateTo(context, HomeScreen());
+          Navigator.pop(context);
+          navigateTo(context, BottomNavbar());
         }
 
         if (state is ErrorOccurred) {
-          // Navigator.pop(context);
+          Navigator.pop(context);
           String errorMsg = (state).errorMsg;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(errorMsg),
-              backgroundColor: Colors.black,
-              duration: Duration(seconds: 3),
-            ),
-          );
+          message(message: errorMsg, color: Colors.red);
         }
       },
-      child: Container(),
+      // child: Container(),
     );
   }
 
@@ -114,9 +89,11 @@ class _VerifficationState extends State<Veriffication> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
                 icon: const Icon(
-                  Icons.arrow_back_ios_new,
+                  Icons.arrow_back,
                   size: 30,
                 )),
             const SizedBox(
@@ -127,11 +104,11 @@ class _VerifficationState extends State<Veriffication> {
               style: Theme.of(context)
                   .textTheme
                   .titleLarge
-                  ?.copyWith(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 26),
+                  ?.copyWith(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 22),
             ),
             Text(
               'ادخل الكود المؤلف من 6 ارقام',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.grey[700]),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.grey[700], fontSize: 20),
             ),
             const SizedBox(
               height: 12,

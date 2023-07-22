@@ -5,11 +5,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:my_bank/Auth/OtpScreen.dart';
+import 'package:my_bank/Auth/loginScreen.dart';
 import 'package:my_bank/Auth/veriffication.dart';
 import 'package:my_bank/Themes/app_theme.dart';
 import 'package:my_bank/cubit/cubit.dart';
-import 'package:my_bank/Auth/loginScreen.dart';
 import 'package:my_bank/layout/screens/bottom_navbar.dart';
 
 void main() async {
@@ -49,10 +48,8 @@ class MyApp extends StatelessWidget {
               darkTheme: darkTheme,
               theme: lightTheme,
               themeMode: AppBankCubit.get(context).isDark ? ThemeMode.dark : ThemeMode.light,
-              home: Login(
-                  // phoneNumber: '',
-                  ));
-          // home: islogin == false ? const Login() : const BottomNavbar());
+              // home: islogin == false ? const Login() : const BottomNavbar());
+              home: const Login());
         },
       ),
     );

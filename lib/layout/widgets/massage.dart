@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:my_bank/constants/my_colors.dart';
 
 message({
   required String message,
@@ -25,3 +26,17 @@ goBack(context) => Padding(
             size: 30,
           )),
     );
+
+void showProgressIndicator(context) {
+  showDialog(
+    barrierColor: Colors.white.withOpacity(0),
+    barrierDismissible: false,
+    context: context,
+    builder: (context) {
+      return const Center(
+          child: CircularProgressIndicator(
+        color: MyColors.purple,
+      ));
+    },
+  );
+}

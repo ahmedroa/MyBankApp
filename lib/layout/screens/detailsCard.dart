@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:my_bank/constants/my_colors.dart';
 import 'package:my_bank/layout/widgets/MyCard.dart';
@@ -17,7 +19,7 @@ class DetailsCard extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                'بطاقاتي',
+                'تفاصيل البطاقه',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: AppBankCubit.get(context).isDark ? MyColors.containerlight : MyColors.containerDark),
               ),

@@ -1,15 +1,13 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, avoid_print, unnecessary_this
-
+// ignore_for_file: prefer_typing_uninitialized_variables, avoid_print, unnecessary_this, body_might_complete_normally_catch_error
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:meta/meta.dart';
 import 'package:my_bank/constants/my_colors.dart';
 import 'package:my_bank/layout/screens/bottom_navbar.dart';
+import 'package:my_bank/layout/widgets/massage.dart';
 import 'package:my_bank/model/userModel.dart';
-
 part 'app_bank_state.dart';
 
 class AppBankCubit extends Cubit<AppBankState> {
@@ -26,7 +24,7 @@ class AppBankCubit extends Cubit<AppBankState> {
     emit(Loading());
 
     await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: '+2$phoneNumber',
+      phoneNumber: '+2  $phoneNumber',
       timeout: const Duration(seconds: 14),
       verificationCompleted: verificationCompleted,
       verificationFailed: verificationFailed,
@@ -35,7 +33,6 @@ class AppBankCubit extends Cubit<AppBankState> {
     );
   }
 
-// 01287729832
   void verificationCompleted(PhoneAuthCredential credential) async {
     print('verificationCompleted');
     await signIn(credential);
@@ -73,12 +70,6 @@ class AppBankCubit extends Cubit<AppBankState> {
 
       emit(PhoneOTPVerified());
     } catch (error) {
-      print('=========================');
-      print('=========================');
-      print('=========================');
-      print(error);
-      print('=========================');
-
       emit(ErrorOccurred(errorMsg: error.toString()));
     }
   }
@@ -103,50 +94,33 @@ class AppBankCubit extends Cubit<AppBankState> {
     }
   }
 
-  User getLoggedInUser() {
-    User firebaseUser = FirebaseAuth.instance.currentUser!;
-    return firebaseUser;
+  signin({required String email, required String passpprd}) async {
+    try {
+      emit(Loading());
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: passpprd);
+      emit(LoginSuccessful());
+      message(message: 'تم تسجيبل الدخول بنجاح ', color: Colors.grey.shade800);
+    } on FirebaseAuthException catch (exception) {
+      emit(LogoutFailed());
+      if (exception.code == 'user-not-found') {
+        message(message: 'لم يتم العثور على مستخدم لهذا البريد الإلكتروني', color: Colors.red);
+      } else if (exception.code == 'wrong-password') {
+        message(message: 'البريد الاكتروني وكلمة المرور غير متطابقان', color: Colors.red);
+      }
+    }
   }
 
-  String? uid;
-  UserModel? userModel;
-  var uIDd;
-  getDataAdmn() async {
-    uIDd = FirebaseAuth.instance.currentUser!.uid;
-    emit(GetDataUserLodingState());
-    FirebaseFirestore.instance
-        .collection('admin')
-        .doc('uqCyXIbO3mORabSpoEn7uFfeirc2')
-        .get()
-        .then((value) => {
-              emit(GetDataUserSussesState()),
+  signUp({required String email, required String passpprd, required String name, required String phone}) async {
+    emit(Loading());
+    try {
+      FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: phone).then((userData) {
+        UserModel model =
+            UserModel(uId: userData.user!.uid, email: email, password: passpprd, name: name, phone: phone);
+        FirebaseFirestore.instance.collection('user').doc(userData.user!.uid).set(model.toJson());
+        submitPhoneNumber(phone);
 
-              // user = UserDataModel.fromJson(value.data()!);
-              userModel = UserModel.fromJson(value.data()!),
-              debugPrint(userModel!.email),
-            })
-        .catchError((e) {
-      debugPrint(e.toString());
-      debugPrint('======================================');
-
-      emit(GetDataUserErrorgState());
-    });
+        emit(LoginSuccessful());
+      });
+    } catch (e) {}
   }
-
-  // getDataUser() async {
-  //   uid = FirebaseAuth.instance.currentUser!.uid;
-  //   emit(GetDataUserLodingState());
-  //   FirebaseFirestore.instance
-  //       .collection('admin')
-  //       .doc('uqCyXIbO3mORabSpoEn7uFfeirc2')
-  //       .get()
-  //       .then((value) => {
-  //             emit(GetDataUserSussesState()),
-  //             print(userModel),
-  //             userModel = UserModel.fromJson(value.data()!),
-  //           })
-  //       .catchError((e) {
-  //     emit(GetDataUserErrorgState());
-  //   });
-  // }
 }

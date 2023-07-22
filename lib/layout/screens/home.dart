@@ -5,6 +5,7 @@ import 'package:my_bank/constants/my_colors.dart';
 import 'package:my_bank/cubit/cubit.dart';
 import 'package:my_bank/layout/screens/detailsCard.dart';
 import 'package:my_bank/layout/screens/history.dart';
+import 'package:my_bank/layout/widgets/BuildItime.dart';
 import 'package:my_bank/layout/widgets/MyCard.dart';
 import 'package:my_bank/layout/widgets/TransactionCard.dart';
 
@@ -13,7 +14,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var cubit = AppBankCubit.get(context);
     return Scaffold(
       body: SafeArea(
         child: Column(children: [
@@ -28,32 +28,28 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(
                   width: 10,
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 6),
-                //   child: Text(
-                //     '${cubit.userModel!.email}',
-                //     // ignore: deprecated_member_use .
-                //     style: Theme.of(context).textTheme.headline1,
-                //   ),
-                // ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6),
+                  child: Text(
+                    'احمد',
+                    style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 16),
+                  ),
+                ),
                 const Spacer(),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
-                // IconButton(onPressed: () {}, icon: const Icon(Icons.menu))
-                IconButton(
-                    onPressed: () {
-                      AppBankCubit.get(context).getDataAdmn();
-                    },
-                    icon: const Icon(Icons.brightness_4_outlined)),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.menu))
               ],
             ),
           ),
           InkWell(
             onTap: () => navigateTo(context, const DetailsCard()),
-            child: const MyCard(
-              color: Color.fromARGB(255, 116, 79, 152),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: const MyCard(
+                color: Color.fromARGB(255, 116, 79, 152),
+              ),
             ),
           ),
-          // Image.asset('image/card.png'),
           const SizedBox(
             height: 10,
           ),
@@ -62,7 +58,6 @@ class HomeScreen extends StatelessWidget {
             child: Container(
               width: double.infinity,
               height: 90,
-              // color: Colors.white,
               decoration: BoxDecoration(
                 color: AppBankCubit.get(context).isDark ? MyColors.containerDark : MyColors.containerlight,
                 borderRadius: const BorderRadius.only(
@@ -76,10 +71,9 @@ class HomeScreen extends StatelessWidget {
                 padding: EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    buildItime(icon: Icons.add_card, label: 'اضاة بطاقة'),
-                    buildItime(icon: Icons.currency_exchange, label: 'تحويل'),
-                    buildItime(icon: Icons.add, label: 'سحب بدون بطاقه'),
-                    // buildItime(icon: Icons.add, label: 'add'),
+                    BuildItime(icon: Icons.add_card, label: 'اضاة بطاقة'),
+                    BuildItime(icon: Icons.currency_exchange, label: 'تحويل'),
+                    BuildItime(icon: Icons.add, label: 'سحب بدون بطاقه'),
                   ],
                 ),
               ),
